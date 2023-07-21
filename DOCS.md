@@ -6,6 +6,7 @@
 - Spring boot
 - MySQL Database
 - Thymeleaf
+- Bootstrap
 - Basic HTML/CSS/JavaScript
 
 ## Project Deployed AT
