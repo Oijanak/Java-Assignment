@@ -39,6 +39,19 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
+
+	@Override
+	public User getUser(String email, String password) {
+		
+		return userRepo.findUserByEmailAndPassword(email, password);
+	}
+
+	@Override
+	public User getUserById(int id) {
+		
+		return userRepo.getById(id);
+	}
+	
 	
 
 }
