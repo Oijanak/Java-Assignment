@@ -49,7 +49,7 @@ public class UserController {
 		//Checking if user exists or not
 		if(userServ.verifyUser(email, password)) {
 			session.setAttribute("active", userServ.getUser(email, password));
-			session.setMaxInactiveInterval(0);
+			session.setMaxInactiveInterval(-100);
 			model.addAttribute("user",userServ.getUser(email, password));
 			return "UserProfile";
 		}
@@ -57,33 +57,68 @@ public class UserController {
 		model.addAttribute("error","email or password didn't match");
 		return "Login";
 	}
+	
 	@GetMapping("/userProfile")
-public String getUserProfile(HttpSession session,Model model) {
+	public String getUserProfile(HttpSession session,Model model) {
+		
 		User user=(User) session.getAttribute("active");
-		model.addAttribute("user",user);
+		if(user==null) {
+			model.addAttribute("expired","Session Expired");
+			return "Login";
+		}
+		model.addAttribute("user",userServ.getUserById(user.getId()));
 		return "UserProfile";
 	}
 	
 	@GetMapping("/changePassword")
-	public String getChangePassword() {
+	public String getChangePassword(HttpSession session) {
+		if(session.getAttribute("active")==null) {
+			return "Login";
+		}
 		return "ChangePassword";
 	}
 	
+	
+	//Change Password
 	@PostMapping("/changePassword")
 	public String changePassword(HttpSession session,@RequestParam String password,@RequestParam String newPassword,Model model) {
 		User u=(User) session.getAttribute("active");
+		if(u==null) {
+			return "Login";
+		}
 		password=hash.hashString(password);
 		System.out.println(u.getPassword());
 		if(u.getPassword().equals(password)) {
 			System.out.println(u.getId());
 			u.setPassword(newPassword);
 			userServ.registerUser(u);
-			session.setAttribute("active", userServ.getUserById(u.getId()));
 			model.addAttribute("Success","Password Changed");
 			return "ChangePassword";
 		}
-		session.setAttribute("active", userServ.getUserById(u.getId()));
+		
 		model.addAttribute("unmatch","Password didnt match");
 		return "ChangePassword";
 	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "Login";
+	}
+	@GetMapping("/updateProfile")
+	public String getUpdateForm(HttpSession session,Model model) {
+		User user=(User) session.getAttribute("active");
+		if(user==null) {
+			return "Login";
+		}
+		model.addAttribute("user",user);
+		return "UpdateProfile";
+	}
+	@PostMapping("/updateProfile")
+	public String updateProfile(@ModelAttribute User user,Model model) {
+		userServ.updateUser(user);
+		model.addAttribute("user",userServ.getUserById(user.getId()));
+		return "UserProfile";
+	}
+	
 }

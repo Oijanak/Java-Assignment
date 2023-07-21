@@ -9,5 +9,6 @@ public interface UserService {
 	boolean verifyEmail(String email);
 	User getUser(String email,String password);
 	User getUserById(int id);
+	void updateUser(User user);
 
 }

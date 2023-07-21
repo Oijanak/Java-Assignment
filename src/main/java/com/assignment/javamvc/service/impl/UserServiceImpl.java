@@ -51,6 +51,12 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepo.getById(id);
 	}
+
+	@Override
+	public void updateUser(User user) {
+		userRepo.save(user);
+		
+	}
 	
 	
 
