@@ -48,8 +48,10 @@ public class UserController {
 		password=hash.hashString(password);
 		//Checking if user exists or not
 		if(userServ.verifyUser(email, password)) {
+			//Session mangement of user
 			session.setAttribute("active", userServ.getUser(email, password));
-			session.setMaxInactiveInterval(-100);
+			session.setMaxInactiveInterval(500);
+			
 			model.addAttribute("user",userServ.getUser(email, password));
 			return "UserProfile";
 		}
@@ -57,6 +59,7 @@ public class UserController {
 		model.addAttribute("error","email or password didn't match");
 		return "Login";
 	}
+	
 	
 	@GetMapping("/userProfile")
 	public String getUserProfile(HttpSession session,Model model) {
@@ -115,7 +118,10 @@ public class UserController {
 		return "UpdateProfile";
 	}
 	@PostMapping("/updateProfile")
-	public String updateProfile(@ModelAttribute User user,Model model) {
+	public String updateProfile(@ModelAttribute User user,Model model,HttpSession session) {
+		if(session.getAttribute("active")==null) {
+			return "Login";
+		}
 		userServ.updateUser(user);
 		model.addAttribute("user",userServ.getUserById(user.getId()));
 		return "UserProfile";

@@ -39,13 +39,14 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
-
+	//Return User data by verifying email and password
 	@Override
 	public User getUser(String email, String password) {
 		
 		return userRepo.findUserByEmailAndPassword(email, password);
 	}
-
+	
+	//Returns User data by User Id
 	@Override
 	public User getUserById(int id) {
 		
