@@ -14,8 +14,8 @@
 
 ## Run project locally 
  ### Prerequisites
-  - Jdk must installed
-  - Mysql must installed and running
+  - Jdk must be installed
+  - Mysql must be installed and running
   - Configure database with your mySQL port number, username and password at application.properties file
 ### How to run locally
  ```
