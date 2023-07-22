@@ -23,6 +23,7 @@ git clone https://github.com/Oijanak/Java-Assignment.git
 cd Java-Assignment
 ./mvnw spring-boot:run
 ```
+Run project at localhost:8080 in your browser
  
 
 
